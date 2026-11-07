@@ -1,0 +1,4 @@
+/home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles/project.dir
+/home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles/clang-format.dir
+/home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles/edit_cache.dir
+/home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles/rebuild_cache.dir
