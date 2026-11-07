@@ -21,7 +21,7 @@ struct Settings {
 
     float materialSize = 10.0f;
 
-    // Внешний прямоугольный магнит (координаты в сцене)
+    // Прямоугольный магнит: можно располагать в любой точке рабочей области
     bool magnetEnabled = true;
     Vector3 magnetPosition = {0.0f, 0.0f, 16.0f};
     Vector3 magnetRotation = {0.0f, 0.0f, 0.0f}; // градусы X/Y/Z

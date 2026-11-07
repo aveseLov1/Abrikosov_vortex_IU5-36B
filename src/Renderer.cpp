@@ -23,6 +23,28 @@ namespace {
 
         return colors[index % 7];
     }
+
+    Camera3D makeCamera(float yaw, float pitch, float distance) {
+        Camera3D camera = {0};
+        camera.target = {0, 0, 0};
+        camera.position = {
+            distance * cosf(pitch) * sinf(yaw),
+            distance * sinf(pitch),
+            distance * cosf(pitch) * cosf(yaw)
+        };
+        camera.up = {0, 1, 0};
+        camera.fovy = 45.0f;
+        camera.projection = CAMERA_PERSPECTIVE;
+        return camera;
+    }
+
+    bool intersectHorizontalPlane(Ray ray, float planeZ, Vector3& hit) {
+        if (fabsf(ray.direction.z) < 0.0001f) return false;
+        float t = (planeZ - ray.position.z) / ray.direction.z;
+        if (t < 0.0f) return false;
+        hit = Vector3Add(ray.position, Vector3Scale(ray.direction, t));
+        return true;
+    }
 }
 
 bool Renderer::drawSlider(
@@ -126,16 +148,7 @@ bool Renderer::drawButton(
 }
 
 void Renderer::drawWorld(const Simulation& simulation, const Settings& settings) {
-    Camera3D camera = {0};
-    camera.target = {0, 0, 0};
-    camera.position = {
-        cameraDistance * cosf(cameraPitch) * sinf(cameraYaw),
-        cameraDistance * sinf(cameraPitch),
-        cameraDistance * cosf(cameraPitch) * cosf(cameraYaw)
-    };
-    camera.up = {0, 1, 0};
-    camera.fovy = 45.0f;
-    camera.projection = CAMERA_PERSPECTIVE;
+    Camera3D camera = makeCamera(cameraYaw, cameraPitch, cameraDistance);
 
     BeginMode3D(camera);
     DrawGrid(20, 1.0f);
@@ -143,29 +156,36 @@ void Renderer::drawWorld(const Simulation& simulation, const Settings& settings)
     // Полупрозрачный объём образца и его границы.
     DrawCubeWires({0, 0, 0}, 20.0f, 20.0f, 12.0f, DARKGRAY);
 
-    // Прямоугольный магнит расположен снаружи образца.
-    if (settings.magnetEnabled) {
+    // Магнит остаётся видимым даже при выключенном поле, чтобы его можно было
+    // свободно размещать. При OFF корпус и полюса становятся приглушёнными.
+    {
         Vector3 pos = settings.magnetPosition;
         Vector3 axis = Magnet::getMomentDirection(settings.magnetRotation);
-        DrawCubeV(pos, {3.2f, 1.25f, 1.25f}, {115, 125, 145, 255});
-        DrawCubeWiresV(pos, {3.2f, 1.25f, 1.25f}, WHITE);
-        DrawSphere(Vector3Add(pos, Vector3Scale(axis, 0.85f)), 0.38f, BLUE);
-        DrawSphere(Vector3Subtract(pos, Vector3Scale(axis, 0.85f)), 0.38f, RED);
-        DrawLine3D(pos, Vector3Add(pos, Vector3Scale(axis, 2.5f)), YELLOW);
+        Color bodyColor = settings.magnetEnabled ? Color{115, 125, 145, 255}
+                                                 : Color{75, 80, 90, 180};
+        Color northColor = settings.magnetEnabled ? BLUE : Color{70, 80, 100, 150};
+        Color southColor = settings.magnetEnabled ? RED : Color{100, 70, 70, 150};
+        DrawCubeV(pos, {3.2f, 1.25f, 1.25f}, bodyColor);
+        DrawCubeWiresV(pos, {3.2f, 1.25f, 1.25f}, settings.magnetEnabled ? WHITE : GRAY);
+        DrawSphere(Vector3Add(pos, Vector3Scale(axis, 0.85f)), 0.38f, northColor);
+        DrawSphere(Vector3Subtract(pos, Vector3Scale(axis, 0.85f)), 0.38f, southColor);
+        DrawLine3D(pos, Vector3Add(pos, Vector3Scale(axis, 2.5f)), settings.magnetEnabled ? YELLOW : GRAY);
 
-        // Упрощённая визуализация направления поля внутри сверхпроводника.
-        for (int ix = -1; ix <= 1; ix++) {
-            for (int iy = -1; iy <= 1; iy++) {
-                for (int iz = -1; iz <= 1; iz++) {
-                    Vector3 q = {(float)ix * 6.0f, (float)iy * 6.0f, (float)iz * 3.5f};
-                    Vector3 b = Magnet::magneticField(
-                        q, settings.magnetPosition,
-                        settings.magnetRotation, settings.magnetStrength
-                    );
-                    float magnitude = Vector3Length(b);
-                    if (magnitude > 0.0001f) {
-                        Vector3 direction = Vector3Scale(Vector3Normalize(b), 0.85f);
-                        DrawLine3D(q, Vector3Add(q, direction), {255, 190, 70, 190});
+        if (settings.magnetEnabled) {
+            // Упрощённая визуализация направления поля внутри сверхпроводника.
+            for (int ix = -1; ix <= 1; ix++) {
+                for (int iy = -1; iy <= 1; iy++) {
+                    for (int iz = -1; iz <= 1; iz++) {
+                        Vector3 q = {(float)ix * 6.0f, (float)iy * 6.0f, (float)iz * 3.5f};
+                        Vector3 b = Magnet::magneticField(
+                            q, settings.magnetPosition,
+                            settings.magnetRotation, settings.magnetStrength
+                        );
+                        float magnitude = Vector3Length(b);
+                        if (magnitude > 0.0001f) {
+                            Vector3 direction = Vector3Scale(Vector3Normalize(b), 0.85f);
+                            DrawLine3D(q, Vector3Add(q, direction), {255, 190, 70, 190});
+                        }
                     }
                 }
             }
@@ -215,10 +235,10 @@ void Renderer::drawInterface(
         drawSlider(6, 20, 490, 205, "Line elasticity", settings.elasticity, 0.1f, 3.0f);
     } else {
         DrawText("EXTERNAL BAR MAGNET", 20, 128, 19, YELLOW);
-        DrawText("Move the magnet outside the sample", 20, 151, 13, LIGHTGRAY);
-        drawSlider(10, 20, 178, 205, "Position X", settings.magnetPosition.x, -18.0f, 18.0f);
-        drawSlider(11, 20, 238, 205, "Position Y", settings.magnetPosition.y, -18.0f, 18.0f);
-        drawSlider(12, 20, 298, 205, "Position Z", settings.magnetPosition.z, 7.0f, 25.0f);
+        DrawText("Place anywhere: inside or outside the cube", 20, 151, 12, LIGHTGRAY);
+        drawSlider(10, 20, 178, 205, "Position X", settings.magnetPosition.x, -25.0f, 25.0f);
+        drawSlider(11, 20, 238, 205, "Position Y", settings.magnetPosition.y, -25.0f, 25.0f);
+        drawSlider(12, 20, 298, 205, "Position Z", settings.magnetPosition.z, -25.0f, 25.0f);
         drawSlider(13, 20, 358, 205, "Field strength", settings.magnetStrength, 0.0f, 60.0f);
         drawSlider(14, 20, 418, 205, "Tilt X (degrees)", settings.magnetRotation.x, -180.0f, 180.0f);
         drawSlider(15, 20, 478, 205, "Tilt Y (degrees)", settings.magnetRotation.y, -180.0f, 180.0f);
@@ -226,8 +246,8 @@ void Renderer::drawInterface(
         if (drawButton(20, 600, 325, 36, settings.magnetEnabled ? "MAGNET: ON" : "MAGNET: OFF")) {
             settings.magnetEnabled = !settings.magnetEnabled;
         }
-        DrawText("Red / blue: magnetic poles", 20, 646, 14, LIGHTGRAY);
-        DrawText("Gold lines: field direction", 20, 666, 14, LIGHTGRAY);
+        DrawText("Drag magnet in 3D with left mouse", 20, 646, 13, LIGHTGRAY);
+        DrawText("Gold lines: field direction (when ON)", 20, 666, 12, LIGHTGRAY);
     }
 
     if (drawButton(20, 700, 145, 38, paused ? "RESUME" : "PAUSE")) paused = !paused;
@@ -241,7 +261,31 @@ void Renderer::draw(
     Settings& settings,
     bool& paused
 ) {
-    if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT) && GetMouseX() > 365) {
+    Camera3D interactionCamera = makeCamera(cameraYaw, cameraPitch, cameraDistance);
+
+    // Перетаскивание магнита мышью по плоскости XY на его текущей высоте.
+    // Высоту Z можно менять ползунком, а точное положение — тремя ползунками.
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && GetMouseX() > 365) {
+        Ray ray = GetScreenToWorldRay(GetMousePosition(), interactionCamera);
+        Vector3 half = {1.9f, 1.0f, 1.0f};
+        BoundingBox box = {
+            Vector3Subtract(settings.magnetPosition, half),
+            Vector3Add(settings.magnetPosition, half)
+        };
+        draggingMagnet = GetRayCollisionBox(ray, box).hit;
+    }
+
+    if (draggingMagnet && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        Ray ray = GetScreenToWorldRay(GetMousePosition(), interactionCamera);
+        Vector3 hit;
+        if (intersectHorizontalPlane(ray, settings.magnetPosition.z, hit)) {
+            settings.magnetPosition.x = std::clamp(hit.x, -25.0f, 25.0f);
+            settings.magnetPosition.y = std::clamp(hit.y, -25.0f, 25.0f);
+        }
+    }
+    if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) draggingMagnet = false;
+
+    if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT) && GetMouseX() > 365 && !draggingMagnet) {
         Vector2 delta = GetMouseDelta();
         cameraYaw -= delta.x * 0.006f;
         cameraPitch += delta.y * 0.006f;
