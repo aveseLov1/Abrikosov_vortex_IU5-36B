@@ -129,6 +129,30 @@ AbrikosovSimulation/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/build
 .PHONY : AbrikosovSimulation/fast
 
+src/Magnet.o: src/Magnet.cpp.o
+.PHONY : src/Magnet.o
+
+# target to build an object file
+src/Magnet.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.o
+.PHONY : src/Magnet.cpp.o
+
+src/Magnet.i: src/Magnet.cpp.i
+.PHONY : src/Magnet.i
+
+# target to preprocess a source file
+src/Magnet.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.i
+.PHONY : src/Magnet.cpp.i
+
+src/Magnet.s: src/Magnet.cpp.s
+.PHONY : src/Magnet.s
+
+# target to generate assembly for a file
+src/Magnet.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.s
+.PHONY : src/Magnet.cpp.s
+
 src/Renderer.o: src/Renderer.cpp.o
 .PHONY : src/Renderer.o
 
@@ -234,6 +258,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... AbrikosovSimulation"
+	@echo "... src/Magnet.o"
+	@echo "... src/Magnet.i"
+	@echo "... src/Magnet.s"
 	@echo "... src/Renderer.o"
 	@echo "... src/Renderer.i"
 	@echo "... src/Renderer.s"

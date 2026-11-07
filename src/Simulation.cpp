@@ -1,5 +1,6 @@
 
 #include "Simulation.h"
+#include "Magnet.h"
 
 #include <cmath>
 #include <algorithm>
@@ -118,6 +119,24 @@ void Simulation::calculateForces(
 
             forces[i][k].y +=
                 e * (prev.y + next.y - 2.0f * current.y);
+        }
+    }
+
+    // Внешнее поле прямоугольного магнита.
+    if (settings.magnetEnabled && settings.magnetStrength > 0.0f) {
+        for (int i = 0; i < count; i++) {
+            for (int k = 0; k < NODES; k++) {
+                const Vector3 p = vortices[i].points[k];
+                Vector3 magneticForce = Magnet::forceOnVortex(
+                    p,
+                    settings.magnetPosition,
+                    settings.magnetRotation,
+                    settings.magnetStrength
+                );
+
+                forces[i][k].x += magneticForce.x;
+                forces[i][k].y += magneticForce.y;
+            }
         }
     }
 

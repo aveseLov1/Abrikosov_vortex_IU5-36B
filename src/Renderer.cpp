@@ -3,6 +3,8 @@
 
 #include <cmath>
 #include <algorithm>
+#include "Magnet.h"
+#include "raymath.h"
 
 namespace {
     constexpr int SCREEN_WIDTH = 1200;
@@ -123,62 +125,63 @@ bool Renderer::drawButton(
         IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
 }
 
-void Renderer::drawWorld(const Simulation& simulation) {
+void Renderer::drawWorld(const Simulation& simulation, const Settings& settings) {
     Camera3D camera = {0};
-
     camera.target = {0, 0, 0};
-
     camera.position = {
         cameraDistance * cosf(cameraPitch) * sinf(cameraYaw),
         cameraDistance * sinf(cameraPitch),
         cameraDistance * cosf(cameraPitch) * cosf(cameraYaw)
     };
-
     camera.up = {0, 1, 0};
     camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
 
     BeginMode3D(camera);
-
-    // Координатная сетка
     DrawGrid(20, 1.0f);
 
-    // Образец сверхпроводника
-    DrawCubeWires(
-        {0, 0, 0},
-        20.0f,
-        20.0f,
-        12.0f,
-        DARKGRAY
-    );
+    // Полупрозрачный объём образца и его границы.
+    DrawCubeWires({0, 0, 0}, 20.0f, 20.0f, 12.0f, DARKGRAY);
 
-    const auto& vortices = simulation.getVortices();
+    // Прямоугольный магнит расположен снаружи образца.
+    if (settings.magnetEnabled) {
+        Vector3 pos = settings.magnetPosition;
+        Vector3 axis = Magnet::getMomentDirection(settings.magnetRotation);
+        DrawCubeV(pos, {3.2f, 1.25f, 1.25f}, {115, 125, 145, 255});
+        DrawCubeWiresV(pos, {3.2f, 1.25f, 1.25f}, WHITE);
+        DrawSphere(Vector3Add(pos, Vector3Scale(axis, 0.85f)), 0.38f, BLUE);
+        DrawSphere(Vector3Subtract(pos, Vector3Scale(axis, 0.85f)), 0.38f, RED);
+        DrawLine3D(pos, Vector3Add(pos, Vector3Scale(axis, 2.5f)), YELLOW);
 
-    // Отрисовка вихревых линий
-    for (int i = 0; i < static_cast<int>(vortices.size()); i++) {
-        const auto& points = vortices[i].points;
-
-        Color color = getVortexColor(i);
-
-        for (int k = 0; k < static_cast<int>(points.size()) - 1; k++) {
-
-            DrawCylinderEx(
-                points[k],
-                points[k + 1],
-                0.10f,
-                0.10f,
-                8,
-                color
-            );
-
-            DrawSphere(points[k], 0.12f, WHITE);
-        }
-
-        if (!points.empty()) {
-            DrawSphere(points.back(), 0.12f, WHITE);
+        // Упрощённая визуализация направления поля внутри сверхпроводника.
+        for (int ix = -1; ix <= 1; ix++) {
+            for (int iy = -1; iy <= 1; iy++) {
+                for (int iz = -1; iz <= 1; iz++) {
+                    Vector3 q = {(float)ix * 6.0f, (float)iy * 6.0f, (float)iz * 3.5f};
+                    Vector3 b = Magnet::magneticField(
+                        q, settings.magnetPosition,
+                        settings.magnetRotation, settings.magnetStrength
+                    );
+                    float magnitude = Vector3Length(b);
+                    if (magnitude > 0.0001f) {
+                        Vector3 direction = Vector3Scale(Vector3Normalize(b), 0.85f);
+                        DrawLine3D(q, Vector3Add(q, direction), {255, 190, 70, 190});
+                    }
+                }
+            }
         }
     }
 
+    const auto& vortices = simulation.getVortices();
+    for (int i = 0; i < static_cast<int>(vortices.size()); i++) {
+        const auto& points = vortices[i].points;
+        Color color = getVortexColor(i);
+        for (int k = 0; k < static_cast<int>(points.size()) - 1; k++) {
+            DrawCylinderEx(points[k], points[k + 1], 0.10f, 0.10f, 8, color);
+            DrawSphere(points[k], 0.12f, WHITE);
+        }
+        if (!points.empty()) DrawSphere(points.back(), 0.12f, WHITE);
+    }
     EndMode3D();
 }
 
@@ -187,134 +190,50 @@ void Renderer::drawInterface(
     Settings& settings,
     bool& paused
 ) {
-    DrawRectangle(
-        0, 0, 310, SCREEN_HEIGHT,
-        {20, 25, 42, 245}
-    );
+    DrawRectangle(0, 0, 365, SCREEN_HEIGHT, {20, 25, 42, 245});
+    DrawText("ABRIKOSOV VORTEX", 18, 18, 22, SKYBLUE);
+    DrawText("3D SIMULATION", 18, 44, 16, WHITE);
+    DrawLine(15, 70, 345, 70, GRAY);
 
-    DrawText(
-        "ABRIKOSOV VORTEX",
-        18, 20, 23, SKYBLUE
-    );
+    if (drawButton(18, 80, 155, 34, "MATERIAL")) magnetTab = false;
+    if (drawButton(185, 80, 160, 34, "MAGNET")) magnetTab = true;
 
-    DrawText(
-        "3D SIMULATION",
-        18, 48, 17, WHITE
-    );
-
-    DrawLine(15, 78, 290, 78, GRAY);
-
-    bool countActive = drawSlider(
-        0, 20, 95, 180,
-        "Vortex count",
-        countValue,
-        4.0f, 36.0f
-    );
-
-    if (countActive) {
-        int newCount = static_cast<int>(
-            std::round(countValue)
-        );
-
-        newCount = std::clamp(newCount, 4, 36);
-
-        if (newCount != settings.vortexCount) {
-            settings.vortexCount = newCount;
-            simulation.initialize(settings);
+    if (!magnetTab) {
+        bool countActive = drawSlider(0, 20, 130, 205, "Vortex count", countValue, 4.0f, 36.0f);
+        if (countActive) {
+            int newCount = std::clamp((int)std::round(countValue), 4, 36);
+            if (newCount != settings.vortexCount) {
+                settings.vortexCount = newCount;
+                simulation.initialize(settings);
+            }
         }
+        drawSlider(1, 20, 190, 205, "Temperature (T/Tc)", settings.temperature, 0.05f, 0.99f);
+        drawSlider(2, 20, 250, 205, "Penetration depth", settings.penetrationDepth, 0.5f, 6.0f);
+        drawSlider(3, 20, 310, 205, "Interaction strength", settings.interactionStrength, 0.1f, 5.0f);
+        drawSlider(4, 20, 370, 205, "Pinning strength", settings.pinningStrength, 0.0f, 5.0f);
+        drawSlider(5, 20, 430, 205, "Viscosity", settings.viscosity, 0.2f, 5.0f);
+        drawSlider(6, 20, 490, 205, "Line elasticity", settings.elasticity, 0.1f, 3.0f);
+    } else {
+        DrawText("EXTERNAL BAR MAGNET", 20, 128, 19, YELLOW);
+        DrawText("Move the magnet outside the sample", 20, 151, 13, LIGHTGRAY);
+        drawSlider(10, 20, 178, 205, "Position X", settings.magnetPosition.x, -18.0f, 18.0f);
+        drawSlider(11, 20, 238, 205, "Position Y", settings.magnetPosition.y, -18.0f, 18.0f);
+        drawSlider(12, 20, 298, 205, "Position Z", settings.magnetPosition.z, 7.0f, 25.0f);
+        drawSlider(13, 20, 358, 205, "Field strength", settings.magnetStrength, 0.0f, 60.0f);
+        drawSlider(14, 20, 418, 205, "Tilt X (degrees)", settings.magnetRotation.x, -180.0f, 180.0f);
+        drawSlider(15, 20, 478, 205, "Tilt Y (degrees)", settings.magnetRotation.y, -180.0f, 180.0f);
+        drawSlider(16, 20, 538, 205, "Rotation Z (degrees)", settings.magnetRotation.z, -180.0f, 180.0f);
+        if (drawButton(20, 600, 325, 36, settings.magnetEnabled ? "MAGNET: ON" : "MAGNET: OFF")) {
+            settings.magnetEnabled = !settings.magnetEnabled;
+        }
+        DrawText("Red / blue: magnetic poles", 20, 646, 14, LIGHTGRAY);
+        DrawText("Gold lines: field direction", 20, 666, 14, LIGHTGRAY);
     }
 
-    drawSlider(
-        1, 20, 155, 180,
-        "Temperature (T/Tc)",
-        settings.temperature,
-        0.05f, 0.99f
-    );
+    if (drawButton(20, 700, 145, 38, paused ? "RESUME" : "PAUSE")) paused = !paused;
+    if (drawButton(185, 700, 160, 38, "RESET VORTICES")) simulation.initialize(settings);
 
-    drawSlider(
-        2, 20, 215, 180,
-        "Penetration depth",
-        settings.penetrationDepth,
-        0.5f, 6.0f
-    );
-
-    drawSlider(
-        3, 20, 275, 180,
-        "Interaction strength",
-        settings.interactionStrength,
-        0.1f, 5.0f
-    );
-
-    drawSlider(
-        4, 20, 335, 180,
-        "Pinning strength",
-        settings.pinningStrength,
-        0.0f, 5.0f
-    );
-
-    drawSlider(
-        5, 20, 395, 180,
-        "Viscosity",
-        settings.viscosity,
-        0.2f, 5.0f
-    );
-
-    drawSlider(
-        6, 20, 455, 180,
-        "Line elasticity",
-        settings.elasticity,
-        0.1f, 3.0f
-    );
-
-    if (drawButton(
-        20, 525, 120, 40,
-        paused ? "RESUME" : "PAUSE"
-    )) {
-        paused = !paused;
-    }
-
-    if (drawButton(
-        155, 525, 135, 40,
-        "RESET"
-    )) {
-        simulation.initialize(settings);
-    }
-
-    DrawLine(15, 585, 290, 585, GRAY);
-
-    DrawText(
-        TextFormat(
-            "Vortices: %d",
-            settings.vortexCount
-        ),
-        20, 605, 18, WHITE
-    );
-
-    DrawText(
-        TextFormat(
-            "Temperature: %.2f Tc",
-            settings.temperature
-        ),
-        20, 632, 17, SKYBLUE
-    );
-
-    DrawText(
-        paused ? "STATUS: PAUSED" : "STATUS: RUNNING",
-        20, 660, 18,
-        paused ? ORANGE : GREEN
-    );
-
-    DrawText("CONTROLS:", 20, 705, 17, YELLOW);
-
-    DrawText(
-        "Right mouse - rotate",
-        20, 730, 15, LIGHTGRAY
-    );
-
-    DrawText(
-        "Mouse wheel - zoom",
-        20, 750, 15, LIGHTGRAY
-    );
+    DrawText(TextFormat("Vortices: %d", settings.vortexCount), 20, 750, 16, WHITE);
 }
 
 void Renderer::draw(
@@ -322,37 +241,20 @@ void Renderer::draw(
     Settings& settings,
     bool& paused
 ) {
-    // Управление камерой
-    if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT) &&
-        GetMouseX() > 310) {
-
+    if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT) && GetMouseX() > 365) {
         Vector2 delta = GetMouseDelta();
-
         cameraYaw -= delta.x * 0.006f;
         cameraPitch += delta.y * 0.006f;
-
-        cameraPitch = std::clamp(
-            cameraPitch, -1.4f, 1.4f
-        );
+        cameraPitch = std::clamp(cameraPitch, -1.4f, 1.4f);
     }
-
     cameraDistance -= GetMouseWheelMove() * 1.5f;
-
-    cameraDistance = std::clamp(
-        cameraDistance, 12.0f, 55.0f
-    );
+    cameraDistance = std::clamp(cameraDistance, 12.0f, 55.0f);
 
     BeginDrawing();
-
     ClearBackground({10, 13, 25, 255});
-
-    drawWorld(simulation);
-
+    drawWorld(simulation, settings);
     drawInterface(simulation, settings, paused);
-
     EndDrawing();
 
-    if (!IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-        activeSlider = -1;
-    }
+    if (!IsMouseButtonDown(MOUSE_BUTTON_LEFT)) activeSlider = -1;
 }

@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "raylib.h"
+
 struct Settings {
     int vortexCount = 16;
 
@@ -18,4 +20,10 @@ struct Settings {
     float timeStep = 0.015f;
 
     float materialSize = 10.0f;
+
+    // Внешний прямоугольный магнит (координаты в сцене)
+    bool magnetEnabled = true;
+    Vector3 magnetPosition = {0.0f, 0.0f, 16.0f};
+    Vector3 magnetRotation = {0.0f, 0.0f, 0.0f}; // градусы X/Y/Z
+    float magnetStrength = 18.0f;
 };

@@ -83,19 +83,19 @@ CMakeFiles/AbrikosovSimulation.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AbrikosovSimulation.dir/src/main.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/main.cpp -o CMakeFiles/AbrikosovSimulation.dir/src/main.cpp.s
 
-CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o: CMakeFiles/AbrikosovSimulation.dir/flags.make
-CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o: /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Vortex.cpp
-CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o: CMakeFiles/AbrikosovSimulation.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o -MF CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o.d -o CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o -c /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Vortex.cpp
+CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o: CMakeFiles/AbrikosovSimulation.dir/flags.make
+CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o: /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Renderer.cpp
+CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o: CMakeFiles/AbrikosovSimulation.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o -MF CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o.d -o CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o -c /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Renderer.cpp
 
-CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Vortex.cpp > CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.i
+CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Renderer.cpp > CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.i
 
-CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Vortex.cpp -o CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.s
+CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Renderer.cpp -o CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.s
 
 CMakeFiles/AbrikosovSimulation.dir/src/Simulation.cpp.o: CMakeFiles/AbrikosovSimulation.dir/flags.make
 CMakeFiles/AbrikosovSimulation.dir/src/Simulation.cpp.o: /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Simulation.cpp
@@ -111,34 +111,50 @@ CMakeFiles/AbrikosovSimulation.dir/src/Simulation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AbrikosovSimulation.dir/src/Simulation.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Simulation.cpp -o CMakeFiles/AbrikosovSimulation.dir/src/Simulation.cpp.s
 
-CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o: CMakeFiles/AbrikosovSimulation.dir/flags.make
-CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o: /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Renderer.cpp
-CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o: CMakeFiles/AbrikosovSimulation.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o -MF CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o.d -o CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o -c /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Renderer.cpp
+CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o: CMakeFiles/AbrikosovSimulation.dir/flags.make
+CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o: /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Vortex.cpp
+CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o: CMakeFiles/AbrikosovSimulation.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o -MF CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o.d -o CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o -c /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Vortex.cpp
 
-CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Renderer.cpp > CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.i
+CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Vortex.cpp > CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.i
 
-CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Renderer.cpp -o CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.s
+CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Vortex.cpp -o CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.s
+
+CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.o: CMakeFiles/AbrikosovSimulation.dir/flags.make
+CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.o: /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Magnet.cpp
+CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.o: CMakeFiles/AbrikosovSimulation.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.o -MF CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.o.d -o CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.o -c /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Magnet.cpp
+
+CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Magnet.cpp > CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.i
+
+CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/src/Magnet.cpp -o CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.s
 
 # Object files for target AbrikosovSimulation
 AbrikosovSimulation_OBJECTS = \
 "CMakeFiles/AbrikosovSimulation.dir/src/main.cpp.o" \
-"CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o" \
+"CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o" \
 "CMakeFiles/AbrikosovSimulation.dir/src/Simulation.cpp.o" \
-"CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o"
+"CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o" \
+"CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.o"
 
 # External object files for target AbrikosovSimulation
 AbrikosovSimulation_EXTERNAL_OBJECTS =
 
 AbrikosovSimulation: CMakeFiles/AbrikosovSimulation.dir/src/main.cpp.o
-AbrikosovSimulation: CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o
-AbrikosovSimulation: CMakeFiles/AbrikosovSimulation.dir/src/Simulation.cpp.o
 AbrikosovSimulation: CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o
+AbrikosovSimulation: CMakeFiles/AbrikosovSimulation.dir/src/Simulation.cpp.o
+AbrikosovSimulation: CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o
+AbrikosovSimulation: CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.o
 AbrikosovSimulation: CMakeFiles/AbrikosovSimulation.dir/build.make
 AbrikosovSimulation: /usr/local/lib/libraylib.a
 AbrikosovSimulation: /usr/lib/x86_64-linux-gnu/libOpenGL.so
@@ -147,7 +163,7 @@ AbrikosovSimulation: /usr/lib/x86_64-linux-gnu/libGLU.so
 AbrikosovSimulation: /usr/lib/x86_64-linux-gnu/libX11.so
 AbrikosovSimulation: /usr/lib/x86_64-linux-gnu/libXext.so
 AbrikosovSimulation: CMakeFiles/AbrikosovSimulation.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable AbrikosovSimulation"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable AbrikosovSimulation"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/AbrikosovSimulation.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

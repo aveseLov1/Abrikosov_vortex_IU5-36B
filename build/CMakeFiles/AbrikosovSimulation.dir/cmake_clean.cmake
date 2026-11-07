@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "AbrikosovSimulation"
   "AbrikosovSimulation.pdb"
+  "CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.o"
+  "CMakeFiles/AbrikosovSimulation.dir/src/Magnet.cpp.o.d"
   "CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o"
   "CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o.d"
   "CMakeFiles/AbrikosovSimulation.dir/src/Simulation.cpp.o"

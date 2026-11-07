@@ -6,5 +6,5 @@ CXX_DEFINES = -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP
 
 CXX_INCLUDES = -I/home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/include
 
-CXX_FLAGS = -std=c++17 -Wall -Wextra -O2
+CXX_FLAGS = -std=c++17
 

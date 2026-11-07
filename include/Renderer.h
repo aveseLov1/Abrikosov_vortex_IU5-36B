@@ -12,6 +12,7 @@ private:
 
     int activeSlider = -1;
     float countValue = 16.0f;
+    bool magnetTab = false;
 
     bool drawSlider(
         int id,
@@ -32,7 +33,7 @@ private:
         const char* name
     );
 
-    void drawWorld(const Simulation& simulation);
+    void drawWorld(const Simulation& simulation, const Settings& settings);
 
     void drawInterface(
         Simulation& simulation,
