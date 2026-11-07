@@ -63,7 +63,7 @@ CMAKE_BINARY_DIR = /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/project.dir/all
+all: CMakeFiles/AbrikosovSimulation.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -71,61 +71,34 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/project.dir/clean
-clean: CMakeFiles/clang-format.dir/clean
+clean: CMakeFiles/AbrikosovSimulation.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/project.dir
+# Target rules for target CMakeFiles/AbrikosovSimulation.dir
 
 # All Build rule for target.
-CMakeFiles/project.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles --progress-num=2,3 "Built target project"
-.PHONY : CMakeFiles/project.dir/all
+CMakeFiles/AbrikosovSimulation.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles --progress-num=1,2,3,4,5 "Built target AbrikosovSimulation"
+.PHONY : CMakeFiles/AbrikosovSimulation.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/project.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/project.dir/all
+CMakeFiles/AbrikosovSimulation.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles 5
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/AbrikosovSimulation.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles 0
-.PHONY : CMakeFiles/project.dir/rule
+.PHONY : CMakeFiles/AbrikosovSimulation.dir/rule
 
 # Convenience name for target.
-project: CMakeFiles/project.dir/rule
-.PHONY : project
+AbrikosovSimulation: CMakeFiles/AbrikosovSimulation.dir/rule
+.PHONY : AbrikosovSimulation
 
 # clean rule for target.
-CMakeFiles/project.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/clean
-.PHONY : CMakeFiles/project.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/clang-format.dir
-
-# All Build rule for target.
-CMakeFiles/clang-format.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/clang-format.dir/build.make CMakeFiles/clang-format.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/clang-format.dir/build.make CMakeFiles/clang-format.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles --progress-num=1 "Built target clang-format"
-.PHONY : CMakeFiles/clang-format.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/clang-format.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles 1
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/clang-format.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/artem/For_BMSTU/Abrikosov_vortex_IU5-36B/build/CMakeFiles 0
-.PHONY : CMakeFiles/clang-format.dir/rule
-
-# Convenience name for target.
-clang-format: CMakeFiles/clang-format.dir/rule
-.PHONY : clang-format
-
-# clean rule for target.
-CMakeFiles/clang-format.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/clang-format.dir/build.make CMakeFiles/clang-format.dir/clean
-.PHONY : CMakeFiles/clang-format.dir/clean
+CMakeFiles/AbrikosovSimulation.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/clean
+.PHONY : CMakeFiles/AbrikosovSimulation.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

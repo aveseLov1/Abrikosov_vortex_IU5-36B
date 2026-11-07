@@ -1,45 +1,46 @@
-cmake_minimum_required(VERSION 3.20)
 
-project(project)
+cmake_minimum_required(VERSION 3.16)
 
-set(CMAKE_CXX_STANDARD 20)
+project(AbrikosovSimulation
+    VERSION 1.0
+    LANGUAGES CXX
+)
+
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(SOURCES
-    testing.cpp
+find_package(raylib QUIET)
 
-)
-
-set(HEADERS
-
-)
-
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
-
-target_compile_options(${PROJECT_NAME} PRIVATE
-    -Wall
-    -Wextra
-    -Werror
-    -Wpedantic
-)
-
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_options(${PROJECT_NAME} PRIVATE -g)
+if(NOT raylib_FOUND)
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(RAYLIB REQUIRED IMPORTED_TARGET raylib)
+    set(RAYLIB_TARGET PkgConfig::RAYLIB)
 else()
-    target_compile_options(${PROJECT_NAME} PRIVATE -O2)
+    set(RAYLIB_TARGET raylib)
 endif()
 
-find_program(CLANG_FORMAT_EXE clang-format)
-if(CLANG_FORMAT_EXE)
-    add_custom_target(
-        clang-format
-        COMMAND ${CLANG_FORMAT_EXE}
-        --dry-run
-        -Werror
-        ${SOURCES}
-        ${HEADERS}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        COMMENT "Проверка форматирования кода"
+add_executable(AbrikosovSimulation
+    src/main.cpp
+    src/Vortex.cpp
+    src/Simulation.cpp
+    src/Renderer.cpp
+)
+
+target_include_directories(AbrikosovSimulation
+    PRIVATE
+    ${PROJECT_SOURCE_DIR}/include
+)
+
+target_link_libraries(AbrikosovSimulation
+    PRIVATE
+    ${RAYLIB_TARGET}
+)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(AbrikosovSimulation PRIVATE
+        -Wall
+        -Wextra
+        -O2
     )
 endif()

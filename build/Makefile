@@ -117,54 +117,113 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named project
+# Target rules for targets named AbrikosovSimulation
 
 # Build rule for target.
-project: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 project
-.PHONY : project
+AbrikosovSimulation: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 AbrikosovSimulation
+.PHONY : AbrikosovSimulation
 
 # fast build rule for target.
-project/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/build
-.PHONY : project/fast
+AbrikosovSimulation/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/build
+.PHONY : AbrikosovSimulation/fast
 
-#=============================================================================
-# Target rules for targets named clang-format
-
-# Build rule for target.
-clang-format: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 clang-format
-.PHONY : clang-format
-
-# fast build rule for target.
-clang-format/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/clang-format.dir/build.make CMakeFiles/clang-format.dir/build
-.PHONY : clang-format/fast
-
-testing.o: testing.cpp.o
-.PHONY : testing.o
+src/Renderer.o: src/Renderer.cpp.o
+.PHONY : src/Renderer.o
 
 # target to build an object file
-testing.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/testing.cpp.o
-.PHONY : testing.cpp.o
+src/Renderer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.o
+.PHONY : src/Renderer.cpp.o
 
-testing.i: testing.cpp.i
-.PHONY : testing.i
+src/Renderer.i: src/Renderer.cpp.i
+.PHONY : src/Renderer.i
 
 # target to preprocess a source file
-testing.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/testing.cpp.i
-.PHONY : testing.cpp.i
+src/Renderer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.i
+.PHONY : src/Renderer.cpp.i
 
-testing.s: testing.cpp.s
-.PHONY : testing.s
+src/Renderer.s: src/Renderer.cpp.s
+.PHONY : src/Renderer.s
 
 # target to generate assembly for a file
-testing.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/project.dir/build.make CMakeFiles/project.dir/testing.cpp.s
-.PHONY : testing.cpp.s
+src/Renderer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/src/Renderer.cpp.s
+.PHONY : src/Renderer.cpp.s
+
+src/Simulation.o: src/Simulation.cpp.o
+.PHONY : src/Simulation.o
+
+# target to build an object file
+src/Simulation.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/src/Simulation.cpp.o
+.PHONY : src/Simulation.cpp.o
+
+src/Simulation.i: src/Simulation.cpp.i
+.PHONY : src/Simulation.i
+
+# target to preprocess a source file
+src/Simulation.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/src/Simulation.cpp.i
+.PHONY : src/Simulation.cpp.i
+
+src/Simulation.s: src/Simulation.cpp.s
+.PHONY : src/Simulation.s
+
+# target to generate assembly for a file
+src/Simulation.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/src/Simulation.cpp.s
+.PHONY : src/Simulation.cpp.s
+
+src/Vortex.o: src/Vortex.cpp.o
+.PHONY : src/Vortex.o
+
+# target to build an object file
+src/Vortex.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.o
+.PHONY : src/Vortex.cpp.o
+
+src/Vortex.i: src/Vortex.cpp.i
+.PHONY : src/Vortex.i
+
+# target to preprocess a source file
+src/Vortex.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.i
+.PHONY : src/Vortex.cpp.i
+
+src/Vortex.s: src/Vortex.cpp.s
+.PHONY : src/Vortex.s
+
+# target to generate assembly for a file
+src/Vortex.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/src/Vortex.cpp.s
+.PHONY : src/Vortex.cpp.s
+
+src/main.o: src/main.cpp.o
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
+
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/AbrikosovSimulation.dir/build.make CMakeFiles/AbrikosovSimulation.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
 
 # Help Target
 help:
@@ -174,11 +233,19 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... clang-format"
-	@echo "... project"
-	@echo "... testing.o"
-	@echo "... testing.i"
-	@echo "... testing.s"
+	@echo "... AbrikosovSimulation"
+	@echo "... src/Renderer.o"
+	@echo "... src/Renderer.i"
+	@echo "... src/Renderer.s"
+	@echo "... src/Simulation.o"
+	@echo "... src/Simulation.i"
+	@echo "... src/Simulation.s"
+	@echo "... src/Vortex.o"
+	@echo "... src/Vortex.i"
+	@echo "... src/Vortex.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
 .PHONY : help
 
 
