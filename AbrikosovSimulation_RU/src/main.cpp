@@ -9,11 +9,13 @@ int main() {
     const int SCREEN_WIDTH = 1200;
     const int SCREEN_HEIGHT = 800;
 
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(
         SCREEN_WIDTH,
         SCREEN_HEIGHT,
         "Моделирование вихрей Абрикосова"
     );
+    SetWindowMinSize(1000, 700);
 
     SetTargetFPS(60);
 
@@ -27,6 +29,11 @@ int main() {
     bool paused = false;
 
     while (!WindowShouldClose()) {
+        // F11 разворачивает окно на весь экран рабочего стола и возвращает прежний размер.
+        if (IsKeyPressed(KEY_F11)) {
+            if (IsWindowMaximized()) RestoreWindow();
+            else MaximizeWindow();
+        }
 
         if (!paused) {
             simulation.update(settings);

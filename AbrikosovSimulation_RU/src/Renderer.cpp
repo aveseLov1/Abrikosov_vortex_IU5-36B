@@ -217,7 +217,7 @@ void Renderer::drawInterface(
     Settings& settings,
     bool& paused
 ) {
-    DrawRectangle(0, 0, 365, SCREEN_HEIGHT, {20, 25, 42, 245});
+    DrawRectangle(0, 0, 365, GetScreenHeight(), {20, 25, 42, 245});
     drawText("ВИХРИ АБРИКОСОВА", 18, 18, 22, SKYBLUE);
     drawText("ТРЁХМЕРНАЯ МОДЕЛЬ", 18, 44, 16, WHITE);
     DrawLine(15, 70, 345, 70, GRAY);
@@ -287,6 +287,31 @@ void Renderer::drawInterface(
     if (drawButton(185, 700, 160, 38, "СБРОСИТЬ ВИХРИ")) simulation.initialize(settings);
 
     drawText(TextFormat("Вихрей: %d", (int)simulation.getVortices().size()), 20, 750, 16, WHITE);
+
+    // Компактное окно с текущими оценками. Поле модели не имеет калибровки в теслах,
+    // поэтому физическая формула показана отдельно и не выдаёт ложное численное значение.
+    const int panelW = 315;
+    const int panelH = 174;
+    const int panelX = std::max(375, GetScreenWidth() - panelW - 18);
+    const int panelY = 18;
+    DrawRectangle(panelX, panelY, panelW, panelH, {20, 25, 42, 225});
+    DrawRectangleLines(panelX, panelY, panelW, panelH, SKYBLUE);
+    drawText("РАСЧЁТ ВИХРЕЙ", panelX + 12, panelY + 10, 17, SKYBLUE);
+    DrawLine(panelX + 10, panelY + 36, panelX + panelW - 10, panelY + 36, GRAY);
+
+    const float averageField = simulation.getAverageField(settings);
+    const int targetCount = simulation.getTargetVortexCount(settings);
+    drawText(TextFormat("Среднее |Bz| модели: %.5f", averageField),
+             panelX + 12, panelY + 46, 13, WHITE);
+    drawText("Порог Hc1: 0.00150  |  насыщение: 0.018",
+             panelX + 12, panelY + 67, 10, LIGHTGRAY);
+    drawText(TextFormat("Доля заполнения: %.1f%%", averageField <= 0.0015f ? 0.0f :
+             std::clamp((averageField - 0.0015f) / (0.018f - 0.0015f), 0.0f, 1.0f) * 100.0f),
+             panelX + 12, panelY + 86, 12, WHITE);
+    drawText(TextFormat("Целевое число по модели: %d из %d", targetCount, settings.vortexCount),
+             panelX + 12, panelY + 106, 12, YELLOW);
+    drawText("Физическая оценка: N = B * S / Phi0", panelX + 12, panelY + 128, 12, SKYBLUE);
+    drawText("Phi0 = 2.068e-15 Wb; нужны B (Тл) и S (м²)", panelX + 12, panelY + 148, 9, LIGHTGRAY);
 }
 
 void Renderer::draw(

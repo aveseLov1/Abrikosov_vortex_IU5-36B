@@ -38,4 +38,6 @@ public:
     void update(const Settings& settings);
 
     const std::vector<Vortex>& getVortices() const;
+    float getAverageField(const Settings& settings) const;
+    int getTargetVortexCount(const Settings& settings) const;
 };

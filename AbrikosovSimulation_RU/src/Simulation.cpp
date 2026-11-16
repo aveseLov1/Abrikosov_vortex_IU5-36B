@@ -18,10 +18,10 @@ void Simulation::initialize(const Settings& settings) {
     vortexSpawnAccumulator = 0.0f;
 }
 
-int Simulation::calculateFieldDrivenVortexCount(const Settings& settings) const {
-    if (!settings.magnetEnabled || settings.magnetStrength <= 0.0f) return 0;
+float Simulation::getAverageField(const Settings& settings) const {
+    if (!settings.magnetEnabled || settings.magnetStrength <= 0.0f) return 0.0f;
 
-    // Оцениваем среднее |Bz| в объёме сверхпроводника.
+    // Среднее |Bz| в 125 точках объёма сверхпроводника.
     float sum = 0.0f;
     int samples = 0;
     for (int ix = -2; ix <= 2; ++ix) {
@@ -35,17 +35,22 @@ int Simulation::calculateFieldDrivenVortexCount(const Settings& settings) const 
             }
         }
     }
-    const float averageField = sum / static_cast<float>(samples);
+    return sum / static_cast<float>(samples);
+}
 
-    // Условный порог проникновения и масштаб насыщения для единиц сцены.
-    // Это упрощённая демонстрационная оценка нижнего критического поля Hк1, а не расчёт в теслах.
+int Simulation::calculateFieldDrivenVortexCount(const Settings& settings) const {
+    const float averageField = getAverageField(settings);
     constexpr float Hc1 = 0.0015f;
     constexpr float Hfull = 0.018f;
     if (averageField <= Hc1) return 0;
 
-    float fraction = std::clamp((averageField - Hc1) / (Hfull - Hc1), 0.0f, 1.0f);
-    int maximum = std::clamp(settings.vortexCount, 4, 36);
+    const float fraction = std::clamp((averageField - Hc1) / (Hfull - Hc1), 0.0f, 1.0f);
+    const int maximum = std::clamp(settings.vortexCount, 4, 36);
     return std::clamp(static_cast<int>(std::ceil(fraction * maximum)), 0, maximum);
+}
+
+int Simulation::getTargetVortexCount(const Settings& settings) const {
+    return calculateFieldDrivenVortexCount(settings);
 }
 
 void Simulation::addVortex(const Settings& settings) {
