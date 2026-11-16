@@ -10,20 +10,6 @@ namespace {
     constexpr int SCREEN_WIDTH = 1200;
     constexpr int SCREEN_HEIGHT = 800;
 
-    Color getVortexColor(int index) {
-        const Color colors[] = {
-            SKYBLUE,
-            BLUE,
-            PURPLE,
-            MAGENTA,
-            GREEN,
-            ORANGE,
-            YELLOW
-        };
-
-        return colors[index % 7];
-    }
-
     Camera3D makeCamera(float yaw, float pitch, float distance) {
         Camera3D camera = {0};
         camera.target = {0, 0, 0};
@@ -197,13 +183,11 @@ void Renderer::drawWorld(const Simulation& simulation, const Settings& settings)
     // (квантованной трубки магнитного потока) внутри объёма сверхпроводника.
     // Соединительные цилиндры намеренно не рисуются.
     const auto& vortices = simulation.getVortices();
-    for (int i = 0; i < static_cast<int>(vortices.size()); i++) {
-        const auto& points = vortices[i].points;
-        Color color = getVortexColor(i);
-
-        for (const Vector3& point : points) {
-            DrawSphere(point, 0.145f, color);
-            DrawSphere(point, 0.060f, WHITE);
+    const Color pointColor = {225, 225, 225, 255};
+    for (const auto& vortex : vortices) {
+        for (const Vector3& point : vortex.points) {
+            // Однотонные маркеры: без индивидуальной окраски и без свечения.
+            DrawSphere(point, 0.13f, pointColor);
         }
     }
     EndMode3D();
@@ -233,10 +217,10 @@ void Renderer::drawInterface(
         }
         drawSlider(1, 20, 190, 205, "Temperature (T/Tc)", settings.temperature, 0.05f, 0.99f);
         drawSlider(2, 20, 250, 205, "Penetration depth", settings.penetrationDepth, 0.5f, 6.0f);
-        drawSlider(3, 20, 310, 205, "Interaction strength", settings.interactionStrength, 0.1f, 5.0f);
-        drawSlider(4, 20, 370, 205, "Pinning strength", settings.pinningStrength, 0.0f, 5.0f);
-        drawSlider(5, 20, 430, 205, "Viscosity", settings.viscosity, 0.2f, 5.0f);
-        drawSlider(6, 20, 490, 205, "Line elasticity", settings.elasticity, 0.1f, 3.0f);
+        drawSlider(4, 20, 310, 205, "Pinning strength", settings.pinningStrength, 0.0f, 5.0f);
+        drawSlider(5, 20, 370, 205, "Viscosity", settings.viscosity, 0.2f, 5.0f);
+        DrawText("Points move independently", 20, 435, 14, LIGHTGRAY);
+        DrawText("Vortex interaction and line elasticity are OFF", 20, 456, 11, GRAY);
     } else {
         DrawText("EXTERNAL BAR MAGNET", 20, 128, 19, YELLOW);
         DrawText("Place anywhere: inside or outside the cube", 20, 151, 12, LIGHTGRAY);

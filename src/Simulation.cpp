@@ -68,59 +68,8 @@ void Simulation::calculateForces(
         )
     );
 
-    // Взаимное отталкивание вихрей
-    for (int i = 0; i < count; i++) {
-        for (int j = i + 1; j < count; j++) {
-
-            for (int k = 0; k < NODES; k++) {
-
-                Vector3 a = vortices[i].points[k];
-                Vector3 b = vortices[j].points[k];
-
-                float dx = a.x - b.x;
-                float dy = a.y - b.y;
-
-                float r2 = dx * dx + dy * dy + 0.01f;
-                float r = std::sqrt(r2);
-
-                float lambda = std::max(
-                    settings.penetrationDepth,
-                    0.1f
-                );
-
-                float force =
-                    settings.interactionStrength *
-                    std::exp(-r / lambda) / r;
-
-                float fx = force * dx / r;
-                float fy = force * dy / r;
-
-                forces[i][k].x += fx;
-                forces[i][k].y += fy;
-
-                forces[j][k].x -= fx;
-                forces[j][k].y -= fy;
-            }
-        }
-    }
-
-    // Упругость вихревых линий
-    for (int i = 0; i < count; i++) {
-        for (int k = 1; k < NODES - 1; k++) {
-
-            Vector3 prev = vortices[i].points[k - 1];
-            Vector3 next = vortices[i].points[k + 1];
-            Vector3 current = vortices[i].points[k];
-
-            float e = settings.elasticity;
-
-            forces[i][k].x +=
-                e * (prev.x + next.x - 2.0f * current.x);
-
-            forces[i][k].y +=
-                e * (prev.y + next.y - 2.0f * current.y);
-        }
-    }
+    // Точки независимы: взаимное отталкивание и упругая связь между
+    // соседними узлами вихревой линии отключены намеренно.
 
     // Внешнее поле прямоугольного магнита.
     if (settings.magnetEnabled && settings.magnetStrength > 0.0f) {
