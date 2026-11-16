@@ -32,3 +32,12 @@ AbrikosovSimulation — версия с внешним прямоугольны�
 - каждая точка получает собственные тепловые флуктуации;
 - взаимное отталкивание точек и упругая связь между узлами отключены;
 - магнитное поле, пиннинг и вязкость продолжают действовать на каждую точку отдельно.
+
+FIELD-INDUCED VORTEX ENTRY
+- The simulation starts with no vortices and the external magnet switched OFF.
+- Enable the magnet and move it toward the superconducting sample.
+- When the estimated field inside the sample exceeds the illustrative Hc1 threshold,
+  vortex point-lines appear gradually. Moving the magnet farther away or switching
+  it OFF makes them disappear gradually in this simplified demonstration.
+- This is a qualitative dipole-field threshold model, not a quantitative solution
+  of the Ginzburg-Landau equations or a calibrated Hc1 value in tesla.

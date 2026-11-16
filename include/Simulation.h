@@ -13,6 +13,10 @@ private:
 
     std::mt19937 generator;
     std::normal_distribution<float> noise;
+    float vortexSpawnAccumulator = 0.0f;
+
+    int calculateFieldDrivenVortexCount(const Settings& settings) const;
+    void addVortex(const Settings& settings);
 
     static constexpr int NODES = 24;
 

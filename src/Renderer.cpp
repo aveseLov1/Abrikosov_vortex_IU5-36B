@@ -219,7 +219,8 @@ void Renderer::drawInterface(
         drawSlider(2, 20, 250, 205, "Penetration depth", settings.penetrationDepth, 0.5f, 6.0f);
         drawSlider(4, 20, 310, 205, "Pinning strength", settings.pinningStrength, 0.0f, 5.0f);
         drawSlider(5, 20, 370, 205, "Viscosity", settings.viscosity, 0.2f, 5.0f);
-        DrawText("Points move independently", 20, 435, 14, LIGHTGRAY);
+        DrawText("Vortices appear when field exceeds Hc1", 20, 435, 12, LIGHTGRAY);
+        DrawText("No external current is required", 20, 452, 12, LIGHTGRAY);
         DrawText("Vortex interaction and line elasticity are OFF", 20, 456, 11, GRAY);
     } else {
         DrawText("EXTERNAL BAR MAGNET", 20, 128, 19, YELLOW);
@@ -236,12 +237,13 @@ void Renderer::drawInterface(
         }
         DrawText("Drag magnet in 3D with left mouse", 20, 646, 13, LIGHTGRAY);
         DrawText("Gold lines: field direction (when ON)", 20, 666, 12, LIGHTGRAY);
+        DrawText("Field above Hc1 creates vortices", 20, 684, 11, LIGHTGRAY);
     }
 
     if (drawButton(20, 700, 145, 38, paused ? "RESUME" : "PAUSE")) paused = !paused;
     if (drawButton(185, 700, 160, 38, "RESET VORTICES")) simulation.initialize(settings);
 
-    DrawText(TextFormat("Vortices: %d", settings.vortexCount), 20, 750, 16, WHITE);
+    DrawText(TextFormat("Vortices: %d", (int)simulation.getVortices().size()), 20, 750, 16, WHITE);
 }
 
 void Renderer::draw(
