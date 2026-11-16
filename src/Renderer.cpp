@@ -192,15 +192,19 @@ void Renderer::drawWorld(const Simulation& simulation, const Settings& settings)
         }
     }
 
+    // Вихри отображаются только точечными маркерами.
+    // Каждая цепочка точек — дискретное представление одной вихревой линии
+    // (квантованной трубки магнитного потока) внутри объёма сверхпроводника.
+    // Соединительные цилиндры намеренно не рисуются.
     const auto& vortices = simulation.getVortices();
     for (int i = 0; i < static_cast<int>(vortices.size()); i++) {
         const auto& points = vortices[i].points;
         Color color = getVortexColor(i);
-        for (int k = 0; k < static_cast<int>(points.size()) - 1; k++) {
-            DrawCylinderEx(points[k], points[k + 1], 0.10f, 0.10f, 8, color);
-            DrawSphere(points[k], 0.12f, WHITE);
+
+        for (const Vector3& point : points) {
+            DrawSphere(point, 0.145f, color);
+            DrawSphere(point, 0.060f, WHITE);
         }
-        if (!points.empty()) DrawSphere(points.back(), 0.12f, WHITE);
     }
     EndMode3D();
 }
