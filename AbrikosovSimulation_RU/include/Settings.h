@@ -6,8 +6,8 @@
 struct Settings {
     int vortexCount = 16;
 
-    float temperature = 0.35f;
-    float criticalTemperature = 1.0f;
+    float temperature = 4.2f; // температура в Кельвинах
+    float criticalTemperature = 77.0f; // критическая температура модели, К
 
     float penetrationDepth = 3.0f;
     float interactionStrength = 2.0f;

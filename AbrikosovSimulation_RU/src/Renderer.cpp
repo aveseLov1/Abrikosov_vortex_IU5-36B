@@ -234,13 +234,13 @@ void Renderer::drawInterface(
                 simulation.initialize(settings);
             }
         }
-        drawSlider(1, 20, 190, 205, "Температура (T/Tкр)", settings.temperature, 0.05f, 0.99f);
+        drawSlider(1, 20, 190, 205, "Температура (К)", settings.temperature, 4.2f, 77.0f);
         drawSlider(2, 20, 250, 205, "Глубина проникновения", settings.penetrationDepth, 0.5f, 6.0f);
         drawSlider(4, 20, 310, 205, "Сила закрепления", settings.pinningStrength, 0.0f, 5.0f);
         drawSlider(5, 20, 370, 205, "Вязкость", settings.viscosity, 0.2f, 5.0f);
-        drawText("Вихри возникают при поле выше Hc1", 20, 435, 12, LIGHTGRAY);
-        drawText("Внешний ток не требуется", 20, 452, 12, LIGHTGRAY);
-        drawText("Взаимодействие вихрей и упругость отключены", 20, 456, 11, GRAY);
+        drawText("Вихри возникают при поле выше Hc1", 20, 430, 12, LIGHTGRAY);
+        drawText("Внешний ток не требуется", 20, 455, 12, LIGHTGRAY);
+        drawText("Взаимодействие вихрей и упругость отключены", 20, 480, 10, GRAY);
     } else {
         drawText("ВНЕШНИЙ ПОЛОСОВОЙ МАГНИТ", 20, 128, 19, YELLOW);
         drawText("Разместите внутри или снаружи куба", 20, 151, 12, LIGHTGRAY);
