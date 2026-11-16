@@ -6,8 +6,9 @@
 struct Settings {
     int vortexCount = 16;
 
+    int materialIndex = 3; // 0: NbTi, 1: Nb3Sn, 2: MgB2, 3: YBCO
     float temperature = 4.2f; // температура в Кельвинах
-    float criticalTemperature = 77.0f; // критическая температура модели, К
+    float criticalTemperature = 92.0f; // критическая температура выбранного материала, К
 
     float penetrationDepth = 3.0f;
     float interactionStrength = 2.0f;

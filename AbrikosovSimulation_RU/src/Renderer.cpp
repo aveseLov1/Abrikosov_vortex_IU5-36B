@@ -226,7 +226,31 @@ void Renderer::drawInterface(
     if (drawButton(185, 80, 160, 34, "МАГНИТ")) magnetTab = true;
 
     if (!magnetTab) {
-        bool countActive = drawSlider(0, 20, 130, 205, "Количество вихрей", countValue, 4.0f, 36.0f);
+        // Выбор материала циклической кнопкой. Значения Tc — справочные,
+        // температура ползунка ограничивается критической температурой материала.
+        static const char* materialNames[] = {
+            "Ниобий-титан (NbTi)",
+            "Ниобий-олово (Nb3Sn)",
+            "Диборид магния (MgB2)",
+            "Керамика YBCO"
+        };
+        static const float criticalTemperatures[] = {9.2f, 18.0f, 39.0f, 92.0f};
+
+        const int material = std::clamp(settings.materialIndex, 0, 3);
+        settings.materialIndex = material;
+        settings.criticalTemperature = criticalTemperatures[material];
+
+        if (drawButton(20, 125, 325, 34, TextFormat("Материал: %s", materialNames[material]))) {
+            settings.materialIndex = (settings.materialIndex + 1) % 4;
+            settings.criticalTemperature = criticalTemperatures[settings.materialIndex];
+            if (settings.temperature > settings.criticalTemperature) {
+                settings.temperature = settings.criticalTemperature;
+            }
+        }
+        drawText(TextFormat("Критическая температура: %.1f К", settings.criticalTemperature),
+                 20, 164, 13, LIGHTGRAY);
+
+        bool countActive = drawSlider(0, 20, 190, 205, "Количество вихрей", countValue, 4.0f, 36.0f);
         if (countActive) {
             int newCount = std::clamp((int)std::round(countValue), 4, 36);
             if (newCount != settings.vortexCount) {
@@ -234,13 +258,13 @@ void Renderer::drawInterface(
                 simulation.initialize(settings);
             }
         }
-        drawSlider(1, 20, 190, 205, "Температура (К)", settings.temperature, 4.2f, 77.0f);
-        drawSlider(2, 20, 250, 205, "Глубина проникновения", settings.penetrationDepth, 0.5f, 6.0f);
-        drawSlider(4, 20, 310, 205, "Сила закрепления", settings.pinningStrength, 0.0f, 5.0f);
-        drawSlider(5, 20, 370, 205, "Вязкость", settings.viscosity, 0.2f, 5.0f);
-        drawText("Вихри возникают при поле выше Hc1", 20, 430, 12, LIGHTGRAY);
-        drawText("Внешний ток не требуется", 20, 455, 12, LIGHTGRAY);
-        drawText("Взаимодействие вихрей и упругость отключены", 20, 480, 10, GRAY);
+        drawSlider(1, 20, 250, 205, "Температура (К)", settings.temperature, 4.2f, settings.criticalTemperature);
+        drawSlider(2, 20, 310, 205, "Глубина проникновения", settings.penetrationDepth, 0.5f, 6.0f);
+        drawSlider(4, 20, 370, 205, "Сила закрепления", settings.pinningStrength, 0.0f, 5.0f);
+        drawSlider(5, 20, 430, 205, "Вязкость", settings.viscosity, 0.2f, 5.0f);
+        drawText("Вихри возникают при поле выше Hc1", 20, 490, 12, LIGHTGRAY);
+        drawText("Внешний ток не требуется", 20, 515, 12, LIGHTGRAY);
+        drawText("Взаимодействие вихрей и упругость отключены", 20, 540, 10, GRAY);
     } else {
         drawText("ВНЕШНИЙ ПОЛОСОВОЙ МАГНИТ", 20, 128, 19, YELLOW);
         drawText("Разместите внутри или снаружи куба", 20, 151, 12, LIGHTGRAY);
