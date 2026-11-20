@@ -327,7 +327,7 @@ void Renderer::drawInterface(
         DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), {0, 0, 0, 175});
         DrawRectangle(x, y, w, h, {17, 23, 40, 250});
         DrawRectangleLinesEx({(float)x, (float)y, (float)w, (float)h}, 2, SKYBLUE);
-        drawText("ПОДРОБНЫЕ РАСЧЁТЫ И ПАРАМЕТРЫ", x + 22, y + 16, 21, SKYBLUE);
+        drawText("ПОДРОБНЫЕ РАСЧЁТЫ И ПАРАМЕТРЫ", x + 22, y + 16, 25, SKYBLUE);
         if (drawButton(x + w - 122, y + 12, 100, 34, "ЗАКРЫТЬ")) {
             showCalculations = false;
         }
@@ -349,51 +349,51 @@ void Renderer::drawInterface(
         const int left = x + 24;
         const int right = x + w / 2 + 8;
         const int line = 25;
-        drawText("ОБРАЗЕЦ И МАТЕРИАЛ", left, ty, 15, YELLOW); ty += 25;
-        drawText(TextFormat("Материал: %s", materialNames[material]), left, ty, 12, WHITE); ty += line;
-        drawText(TextFormat("Температура: %.2f K", settings.temperature), left, ty, 12, WHITE); ty += line;
-        drawText(TextFormat("Критическая температура Tc: %.2f K", settings.criticalTemperature), left, ty, 12, WHITE); ty += line;
-        drawText(TextFormat("T/Tc = %.4f (%.1f%% от Tc)", tempRatio, tempRatio * 100.0f), left, ty, 12, WHITE); ty += line;
-        drawText(TextFormat("Тепловой множитель: %.5f", thermalFactor), left, ty, 12, WHITE); ty += line;
-        drawText(TextFormat("Глубина проникновения: %.2f усл. ед.", settings.penetrationDepth), left, ty, 12, WHITE); ty += line;
-        drawText("В текущей модели глубина не меняет число вихрей.", left, ty, 10, LIGHTGRAY);
+        drawText("ОБРАЗЕЦ И МАТЕРИАЛ", left, ty, 18, YELLOW); ty += 25;
+        drawText(TextFormat("Материал: %s", materialNames[material]), left, ty, 14, WHITE); ty += line;
+        drawText(TextFormat("Температура: %.2f K", settings.temperature), left, ty, 14, WHITE); ty += line;
+        drawText(TextFormat("Критическая температура Tc: %.2f K", settings.criticalTemperature), left, ty, 14, WHITE); ty += line;
+        drawText(TextFormat("T/Tc = %.4f (%.1f%% от Tc)", tempRatio, tempRatio * 100.0f), left, ty, 14, WHITE); ty += line;
+        drawText(TextFormat("Тепловой множитель: %.5f", thermalFactor), left, ty, 14, WHITE); ty += line;
+        drawText(TextFormat("Глубина проникновения: %.2f усл. ед.", settings.penetrationDepth), left, ty, 14, WHITE); ty += line;
+        drawText("В текущей модели глубина не меняет число вихрей.", left, ty, 12, LIGHTGRAY);
 
         ty = y + 70;
-        drawText("МАГНИТ И МАГНИТНОЕ ПОЛЕ", right, ty, 15, YELLOW); ty += 25;
-        drawText(TextFormat("Магнит: %s", settings.magnetEnabled ? "ВКЛЮЧЁН" : "ВЫКЛЮЧЕН"), right, ty, 12, WHITE); ty += line;
-        drawText(TextFormat("Сила магнита: %.2f усл. ед.", settings.magnetStrength), right, ty, 12, WHITE); ty += line;
-        drawText(TextFormat("Положение: X %.1f | Y %.1f | Z %.1f", settings.magnetPosition.x, settings.magnetPosition.y, settings.magnetPosition.z), right, ty, 10, WHITE); ty += line;
-        drawText(TextFormat("Поворот: X %.1f | Y %.1f | Z %.1f", settings.magnetRotation.x, settings.magnetRotation.y, settings.magnetRotation.z), right, ty, 10, WHITE); ty += line;
-        drawText(TextFormat("Среднее |Bz| по 125 точкам: %.6f", averageField), right, ty, 11, WHITE); ty += line;
-        drawText("Сетка: 5 x 5 x 5; шаг координат: 4", right, ty, 11, LIGHTGRAY); ty += line;
-        drawText("Bср = сумма |Bz(i)| / 125", right, ty, 11, SKYBLUE);
+        drawText("МАГНИТ И МАГНИТНОЕ ПОЛЕ", right, ty, 18, YELLOW); ty += 25;
+        drawText(TextFormat("Магнит: %s", settings.magnetEnabled ? "ВКЛЮЧЁН" : "ВЫКЛЮЧЕН"), right, ty, 14, WHITE); ty += line;
+        drawText(TextFormat("Сила магнита: %.2f усл. ед.", settings.magnetStrength), right, ty, 14, WHITE); ty += line;
+        drawText(TextFormat("Положение: X %.1f | Y %.1f | Z %.1f", settings.magnetPosition.x, settings.magnetPosition.y, settings.magnetPosition.z), right, ty, 12, WHITE); ty += line;
+        drawText(TextFormat("Поворот: X %.1f | Y %.1f | Z %.1f", settings.magnetRotation.x, settings.magnetRotation.y, settings.magnetRotation.z), right, ty, 12, WHITE); ty += line;
+        drawText(TextFormat("Среднее |Bz| по 125 точкам: %.6f", averageField), right, ty, 13, WHITE); ty += line;
+        drawText("Сетка: 5 x 5 x 5; шаг координат: 4", right, ty, 13, LIGHTGRAY); ty += line;
+        drawText("Bср = сумма |Bz(i)| / 125", right, ty, 13, SKYBLUE);
 
         ty = y + 265;
         DrawLine(x + 20, ty, x + w - 20, ty, GRAY); ty += 12;
-        drawText("РАСЧЁТ ЦЕЛЕВОГО ЧИСЛА ВИХРЕЙ", left, ty, 15, YELLOW); ty += 27;
-        drawText(TextFormat("Hc1 = %.4f; Hfull = %.3f (условные единицы)", Hc1, Hfull), left, ty, 12, WHITE); ty += line;
+        drawText("РАСЧЁТ ЦЕЛЕВОГО ЧИСЛА ВИХРЕЙ", left, ty, 18, YELLOW); ty += 27;
+        drawText(TextFormat("Hc1 = %.4f; Hfull = %.3f (условные единицы)", Hc1, Hfull), left, ty, 14, WHITE); ty += line;
         drawText(averageField <= Hc1 ? "Bср <= Hc1: вихри не создаются" :
-            TextFormat("f = (Bср - Hc1) / (Hfull - Hc1) = %.4f", fraction), left, ty, 12, WHITE); ty += line;
-        drawText(TextFormat("f = %.1f%%; максимум Nmax = %d", fraction * 100.0f, settings.vortexCount), left, ty, 12, WHITE); ty += line;
+            TextFormat("f = (Bср - Hc1) / (Hfull - Hc1) = %.4f", fraction), left, ty, 14, WHITE); ty += line;
+        drawText(TextFormat("f = %.1f%%; максимум Nmax = %d", fraction * 100.0f, settings.vortexCount), left, ty, 14, WHITE); ty += line;
         drawText(TextFormat("Nцель = ceil(f * Nmax) = %d", targetCount), left, ty, 12, SKYBLUE); ty += line;
-        drawText(TextFormat("Сейчас создано: %d; разница: %+d", actualCount, targetCount - actualCount), left, ty, 12, WHITE); ty += line;
-        drawText("Обновление: максимум 1 вихрь за 0.12 модельного времени", left, ty, 10, LIGHTGRAY);
+        drawText(TextFormat("Сейчас создано: %d; разница: %+d", actualCount, targetCount - actualCount), left, ty, 14, WHITE); ty += line;
+        drawText("Обновление: максимум 1 вихрь за 0.12 модельного времени", left, ty, 12, LIGHTGRAY);
 
         ty = y + 265;
-        drawText("ДВИЖЕНИЕ И ЗАКРЕПЛЕНИЕ", right, ty, 15, YELLOW); ty += 27;
-        drawText(TextFormat("Вязкость: %.2f", settings.viscosity), right, ty, 12, WHITE); ty += line;
-        drawText(TextFormat("Закрепление: %.2f", settings.pinningStrength), right, ty, 12, WHITE); ty += line;
-        drawText(TextFormat("Шаг времени dt: %.4f", settings.timeStep), right, ty, 12, WHITE); ty += line;
-        drawText(TextFormat("Шаг центров закрепления: %.1f", pinSpacing), right, ty, 12, WHITE); ty += line;
-        drawText("Скорость движения пропорциональна", right, ty, 11, LIGHTGRAY); ty += 18;
-        drawText("силе / вязкости; шум зависит от T/Tc.", right, ty, 11, LIGHTGRAY); ty += 22;
-        drawText("Пиннинг тянет узлы к ближайшему центру.", right, ty, 11, LIGHTGRAY);
+        drawText("ДВИЖЕНИЕ И ЗАКРЕПЛЕНИЕ", right, ty, 18, YELLOW); ty += 27;
+        drawText(TextFormat("Вязкость: %.2f", settings.viscosity), right, ty, 14, WHITE); ty += line;
+        drawText(TextFormat("Закрепление: %.2f", settings.pinningStrength), right, ty, 14, WHITE); ty += line;
+        drawText(TextFormat("Шаг времени dt: %.4f", settings.timeStep), right, ty, 14, WHITE); ty += line;
+        drawText(TextFormat("Шаг центров закрепления: %.1f", pinSpacing), right, ty, 14, WHITE); ty += line;
+        drawText("Скорость движения пропорциональна", right, ty, 13, LIGHTGRAY); ty += 18;
+        drawText("силе / вязкости; шум зависит от T/Tc.", right, ty, 13, LIGHTGRAY); ty += 22;
+        drawText("Пиннинг тянет узлы к ближайшему центру.", right, ty, 13, LIGHTGRAY);
 
         ty = y + h - 82;
         DrawLine(x + 20, ty - 10, x + w - 20, ty - 10, GRAY);
-        drawText("ФИЗИЧЕСКАЯ ОЦЕНКА", left, ty, 14, YELLOW); ty += 23;
-        drawText("N ≈ B * S / Phi0; Phi0 = 2.068e-15 Вб.", left, ty, 11, SKYBLUE);
-        drawText("Число не вычисляется: модельное B не откалибровано в теслах, S не задана в м².", left, ty + 19, 10, LIGHTGRAY);
+        drawText("ФИЗИЧЕСКАЯ ОЦЕНКА", left, ty, 17, YELLOW); ty += 23;
+        drawText("N ≈ B * S / Phi0; Phi0 = 2.068e-15 Вб.", left, ty, 13, SKYBLUE);
+        drawText("Число не вычисляется: модельное B не откалибровано в теслах, S не задана в м².", left, ty + 19, 12, LIGHTGRAY);
     }
 }
 
