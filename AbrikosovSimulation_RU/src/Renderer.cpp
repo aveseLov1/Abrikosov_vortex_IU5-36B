@@ -288,30 +288,113 @@ void Renderer::drawInterface(
 
     drawText(TextFormat("Вихрей: %d", (int)simulation.getVortices().size()), 20, 750, 16, WHITE);
 
-    // Компактное окно с текущими оценками. Поле модели не имеет калибровки в теслах,
-    // поэтому физическая формула показана отдельно и не выдаёт ложное численное значение.
+    // Краткое окно текущего расчёта и кнопка подробного отчёта.
+    const float averageField = simulation.getAverageField(settings);
+    const int targetCount = simulation.getTargetVortexCount(settings);
+    constexpr float Hc1 = 0.0015f;
+    constexpr float Hfull = 0.018f;
+    constexpr float Phi0 = 2.068e-15f;
+    const float fraction = averageField <= Hc1 ? 0.0f :
+        std::clamp((averageField - Hc1) / (Hfull - Hc1), 0.0f, 1.0f);
     const int panelW = 315;
     const int panelH = 174;
     const int panelX = std::max(375, GetScreenWidth() - panelW - 18);
     const int panelY = 18;
     DrawRectangle(panelX, panelY, panelW, panelH, {20, 25, 42, 225});
     DrawRectangleLines(panelX, panelY, panelW, panelH, SKYBLUE);
-    drawText("РАСЧЁТ ВИХРЕЙ", panelX + 12, panelY + 10, 17, SKYBLUE);
+    drawText("ТЕКУЩИЙ РАСЧЁТ", panelX + 12, panelY + 10, 17, SKYBLUE);
     DrawLine(panelX + 10, panelY + 36, panelX + panelW - 10, panelY + 36, GRAY);
+    drawText(TextFormat("Среднее |Bz|: %.5f усл. ед.", averageField),
+             panelX + 12, panelY + 46, 12, WHITE);
+    drawText(TextFormat("Заполнение: %.1f%%", fraction * 100.0f),
+             panelX + 12, panelY + 67, 12, WHITE);
+    drawText(TextFormat("Целевое число: %d / %d", targetCount, settings.vortexCount),
+             panelX + 12, panelY + 88, 12, YELLOW);
+    drawText(TextFormat("Фактически создано: %d", (int)simulation.getVortices().size()),
+             panelX + 12, panelY + 109, 12, WHITE);
+    if (drawButton(panelX + 10, panelY + 132, panelW - 20, 32,
+                   showCalculations ? "СКРЫТЬ ПОДРОБНЫЕ РАСЧЁТЫ" : "ПОКАЗАТЬ ВСЕ РАСЧЁТЫ")) {
+        showCalculations = !showCalculations;
+    }
 
-    const float averageField = simulation.getAverageField(settings);
-    const int targetCount = simulation.getTargetVortexCount(settings);
-    drawText(TextFormat("Среднее |Bz| модели: %.5f", averageField),
-             panelX + 12, panelY + 46, 13, WHITE);
-    drawText("Порог Hc1: 0.00150  |  насыщение: 0.018",
-             panelX + 12, panelY + 67, 10, LIGHTGRAY);
-    drawText(TextFormat("Доля заполнения: %.1f%%", averageField <= 0.0015f ? 0.0f :
-             std::clamp((averageField - 0.0015f) / (0.018f - 0.0015f), 0.0f, 1.0f) * 100.0f),
-             panelX + 12, panelY + 86, 12, WHITE);
-    drawText(TextFormat("Целевое число по модели: %d из %d", targetCount, settings.vortexCount),
-             panelX + 12, panelY + 106, 12, YELLOW);
-    drawText("Физическая оценка: N = B * S / Phi0", panelX + 12, panelY + 128, 12, SKYBLUE);
-    drawText("Phi0 = 2.068e-15 Wb; нужны B (Тл) и S (м²)", panelX + 12, panelY + 148, 9, LIGHTGRAY);
+    if (showCalculations) {
+        // Подробный отчёт поверх сцены. Все значения пересчитываются каждый кадр
+        // из текущих настроек образца и магнита.
+        const int w = std::min(760, GetScreenWidth() - 40);
+        const int h = std::min(650, GetScreenHeight() - 40);
+        const int x = (GetScreenWidth() - w) / 2;
+        const int y = (GetScreenHeight() - h) / 2;
+        DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), {0, 0, 0, 175});
+        DrawRectangle(x, y, w, h, {17, 23, 40, 250});
+        DrawRectangleLinesEx({(float)x, (float)y, (float)w, (float)h}, 2, SKYBLUE);
+        drawText("ПОДРОБНЫЕ РАСЧЁТЫ И ПАРАМЕТРЫ", x + 22, y + 16, 21, SKYBLUE);
+        if (drawButton(x + w - 122, y + 12, 100, 34, "ЗАКРЫТЬ")) {
+            showCalculations = false;
+        }
+        DrawLine(x + 20, y + 55, x + w - 20, y + 55, GRAY);
+
+        static const char* materialNames[] = {
+            "Ниобий-титан (NbTi)", "Ниобий-олово (Nb3Sn)",
+            "Диборид магния (MgB2)", "Керамика YBCO"
+        };
+        const int material = std::clamp(settings.materialIndex, 0, 3);
+        const float tempRatio = std::clamp(settings.temperature /
+            std::max(settings.criticalTemperature, 0.001f), 0.0f, 0.999f);
+        const float thermalFactor = settings.thermalStrength *
+            std::sqrt(tempRatio / std::max(1.0f - tempRatio, 0.001f));
+        const float pinSpacing = 2.5f;
+        const int actualCount = (int)simulation.getVortices().size();
+
+        int ty = y + 70;
+        const int left = x + 24;
+        const int right = x + w / 2 + 8;
+        const int line = 25;
+        drawText("ОБРАЗЕЦ И МАТЕРИАЛ", left, ty, 15, YELLOW); ty += 25;
+        drawText(TextFormat("Материал: %s", materialNames[material]), left, ty, 12, WHITE); ty += line;
+        drawText(TextFormat("Температура: %.2f K", settings.temperature), left, ty, 12, WHITE); ty += line;
+        drawText(TextFormat("Критическая температура Tc: %.2f K", settings.criticalTemperature), left, ty, 12, WHITE); ty += line;
+        drawText(TextFormat("T/Tc = %.4f (%.1f%% от Tc)", tempRatio, tempRatio * 100.0f), left, ty, 12, WHITE); ty += line;
+        drawText(TextFormat("Тепловой множитель: %.5f", thermalFactor), left, ty, 12, WHITE); ty += line;
+        drawText(TextFormat("Глубина проникновения: %.2f усл. ед.", settings.penetrationDepth), left, ty, 12, WHITE); ty += line;
+        drawText("В текущей модели глубина не меняет число вихрей.", left, ty, 10, LIGHTGRAY);
+
+        ty = y + 70;
+        drawText("МАГНИТ И МАГНИТНОЕ ПОЛЕ", right, ty, 15, YELLOW); ty += 25;
+        drawText(TextFormat("Магнит: %s", settings.magnetEnabled ? "ВКЛЮЧЁН" : "ВЫКЛЮЧЕН"), right, ty, 12, WHITE); ty += line;
+        drawText(TextFormat("Сила магнита: %.2f усл. ед.", settings.magnetStrength), right, ty, 12, WHITE); ty += line;
+        drawText(TextFormat("Положение: X %.1f | Y %.1f | Z %.1f", settings.magnetPosition.x, settings.magnetPosition.y, settings.magnetPosition.z), right, ty, 10, WHITE); ty += line;
+        drawText(TextFormat("Поворот: X %.1f | Y %.1f | Z %.1f", settings.magnetRotation.x, settings.magnetRotation.y, settings.magnetRotation.z), right, ty, 10, WHITE); ty += line;
+        drawText(TextFormat("Среднее |Bz| по 125 точкам: %.6f", averageField), right, ty, 11, WHITE); ty += line;
+        drawText("Сетка: 5 x 5 x 5; шаг координат: 4", right, ty, 11, LIGHTGRAY); ty += line;
+        drawText("Bср = сумма |Bz(i)| / 125", right, ty, 11, SKYBLUE);
+
+        ty = y + 265;
+        DrawLine(x + 20, ty, x + w - 20, ty, GRAY); ty += 12;
+        drawText("РАСЧЁТ ЦЕЛЕВОГО ЧИСЛА ВИХРЕЙ", left, ty, 15, YELLOW); ty += 27;
+        drawText(TextFormat("Hc1 = %.4f; Hfull = %.3f (условные единицы)", Hc1, Hfull), left, ty, 12, WHITE); ty += line;
+        drawText(averageField <= Hc1 ? "Bср <= Hc1: вихри не создаются" :
+            TextFormat("f = (Bср - Hc1) / (Hfull - Hc1) = %.4f", fraction), left, ty, 12, WHITE); ty += line;
+        drawText(TextFormat("f = %.1f%%; максимум Nmax = %d", fraction * 100.0f, settings.vortexCount), left, ty, 12, WHITE); ty += line;
+        drawText(TextFormat("Nцель = ceil(f * Nmax) = %d", targetCount), left, ty, 12, SKYBLUE); ty += line;
+        drawText(TextFormat("Сейчас создано: %d; разница: %+d", actualCount, targetCount - actualCount), left, ty, 12, WHITE); ty += line;
+        drawText("Обновление: максимум 1 вихрь за 0.12 модельного времени", left, ty, 10, LIGHTGRAY);
+
+        ty = y + 265;
+        drawText("ДВИЖЕНИЕ И ЗАКРЕПЛЕНИЕ", right, ty, 15, YELLOW); ty += 27;
+        drawText(TextFormat("Вязкость: %.2f", settings.viscosity), right, ty, 12, WHITE); ty += line;
+        drawText(TextFormat("Закрепление: %.2f", settings.pinningStrength), right, ty, 12, WHITE); ty += line;
+        drawText(TextFormat("Шаг времени dt: %.4f", settings.timeStep), right, ty, 12, WHITE); ty += line;
+        drawText(TextFormat("Шаг центров закрепления: %.1f", pinSpacing), right, ty, 12, WHITE); ty += line;
+        drawText("Скорость движения пропорциональна", right, ty, 11, LIGHTGRAY); ty += 18;
+        drawText("силе / вязкости; шум зависит от T/Tc.", right, ty, 11, LIGHTGRAY); ty += 22;
+        drawText("Пиннинг тянет узлы к ближайшему центру.", right, ty, 11, LIGHTGRAY);
+
+        ty = y + h - 82;
+        DrawLine(x + 20, ty - 10, x + w - 20, ty - 10, GRAY);
+        drawText("ФИЗИЧЕСКАЯ ОЦЕНКА", left, ty, 14, YELLOW); ty += 23;
+        drawText("N ≈ B * S / Phi0; Phi0 = 2.068e-15 Вб.", left, ty, 11, SKYBLUE);
+        drawText("Число не вычисляется: модельное B не откалибровано в теслах, S не задана в м².", left, ty + 19, 10, LIGHTGRAY);
+    }
 }
 
 void Renderer::draw(

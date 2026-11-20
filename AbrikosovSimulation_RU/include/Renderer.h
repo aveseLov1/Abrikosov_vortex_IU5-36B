@@ -17,6 +17,7 @@ private:
     float countValue = 16.0f;
     bool magnetTab = false;
     bool draggingMagnet = false;
+    bool showCalculations = false;
 
     bool drawSlider(
         int id,
